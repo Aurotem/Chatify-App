@@ -12,3 +12,6 @@
 body{
   overflow-y: hidden;
 }
+.main-screen {
+  grid-template-columns: 30% 70%;
+}

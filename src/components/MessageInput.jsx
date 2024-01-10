@@ -14,7 +14,11 @@ export default function MessageInput({ userName, chatRoomId }) {
       push(ref(db, "chatrooms/" + chatRoomId), {
         user: userName,
         message: message.current.value,
-        date: `${date.getHours()}:${date.getMinutes()}`,
+        date: `${
+          date.getHours() < 10 ? "0" + date.getHours : date.getHours()
+        }:${
+          date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()
+        }`,
       });
       message.current.value = "";
     }
