@@ -7,6 +7,7 @@ import ChatScreen from "./components/ChatScreen";
 
 function App() {
   const [userName, setUserName] = useState();
+  
   function getName() {
     setUserName(localStorage.getItem('userName'))
   }

@@ -46,7 +46,7 @@ export default function ChatScreen({ userName }) {
       </div>
       <div
         id="messages"
-        className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch justify-items-start h-full overflow-x-hidden"
+        className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch justify-items-start h-dvh overflow-x-hidden"
       >
         {stateMessages.map((e, i) =>
           e.user !== userName ? (
