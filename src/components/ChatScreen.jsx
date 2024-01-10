@@ -173,7 +173,7 @@ export default function ChatScreen({ userName, setHasName }) {
             {!active[2] && (
               <button
                 onClick={showChatRooms}
-                className="mr-4 text-2xl z-0 sm:z-20 text-gray-700"
+                className="mr-4 text-2xl z-20m sm:invisible text-gray-700"
               >
                 Rooms
               </button>
