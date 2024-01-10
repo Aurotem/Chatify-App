@@ -1,19 +1,32 @@
 import { useRef } from "react";
-export default function AddChatRoom({ handleAddChatRoom, handleCloseChatRoomScreen }) {
+export default function AddChatRoom({
+  handleAddChatRoom,
+  handleCloseChatRoomScreen,
+}) {
   const chatRoomToAdd = useRef();
   return (
     <>
-        <div className="fixed h-dvh w-dvw bg-white top-0 z-10"><button className="text-gray-800 text-4xl absolute right-2 top-2" onClick={handleCloseChatRoomScreen}>X</button></div>
-      <div className="absolute hizala w-full h-1/4 items-center justify-center flex rounded-xl md:w-1/2 flex-col z-20">
+      <div className="fixed h-dvh w-dvw bg-white top-0 z-50">
+        <button
+          className="text-gray-800 text-4xl absolute right-2 top-2"
+          onClick={handleCloseChatRoomScreen}
+        >
+          X
+        </button>
+      </div>
+      <div className="absolute hizala w-full h-1/4 items-center justify-center flex rounded-xl md:w-1/2 flex-col z-50">
         <p className="text-xl text-center top-0">Sohbet odası ekle</p>
-        <p className="text-sm mt-6">
-          Bu alanda bir sohbet odası oluşturabilir, veya varolan bir odaya katılabilirsin.
+        <p className="text-sm mt-6 text-center">
+          Bu alanda bir sohbet odası oluşturabilir, veya varolan bir odaya
+          katılabilirsin.
         </p>
         <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"></div>
 
         <input
           ref={chatRoomToAdd}
-          onKeyDown={(e) => e.key == "Enter" && handleAddChatRoom(chatRoomToAdd.current.value)}
+          onKeyDown={(e) =>
+            e.key == "Enter" && handleAddChatRoom(chatRoomToAdd.current.value)
+          }
           type="text"
           id="user-name"
           className=" mt-8 block w-3/4 p-4 ps-5 text-sm text-gray-900 border border-gray-200 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

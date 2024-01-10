@@ -22,10 +22,22 @@ body{
 }
 .chatRooms {
   left: -500px;
+  transition: .2s ease-out;
 }
 .message-section{
   top:0;
   left:0;
+  transition: .2s ease-out;
+}
+.active {
+  left:0;
+  width: 60vw;
+  background: white;
+  z-index: 10;
 
+}
+.deactive{
+  filter: brightness(.4) blur(4px);
+  background-color: rgba(255,255,255,.9);
 }
 }

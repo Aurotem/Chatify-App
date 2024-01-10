@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 //* React
 import { useState, useEffect } from "react";
 
@@ -11,14 +12,15 @@ import { firebaseConfig, app, analytics } from "../../firebase/fire";
 
 let messages = [];
 export default function ChatScreen({ userName }) {
+  //*Messages to display
   const [stateMessages, setStateMessages] = useState([]);
 
-  //*Chatroom
+  //*Chatroom Information
   const [chatRoomId, setChatRoomId] = useState("global");
   const [addingChatRoom, setAddingChatRoom] = useState(false);
-
   let chatRooms = JSON.parse(localStorage.getItem("chatRooms"));
 
+  //*Getting Chat Rooms from local storage.
   useEffect(() => {
     let chatRooms = localStorage.getItem("chatRooms");
     if (!chatRooms) {
@@ -26,25 +28,29 @@ export default function ChatScreen({ userName }) {
     }
   });
 
+  //*Adding Chat Rooms
   function handleAddChatRoom(e) {
     setAddingChatRoom((prev) => !prev);
     let currentChatRooms = JSON.parse(localStorage.getItem("chatRooms"));
-    console.log(currentChatRooms)
     currentChatRooms.push(e);
     localStorage.setItem("chatRooms", JSON.stringify(currentChatRooms));
   }
 
+  //* Closing Add ChatRoom Screen
   function handleCloseChatRoomScreen() {
     setAddingChatRoom((prev) => !prev);
   }
 
+  //* Chat Room Selector
   function selectChatRoom(chatRoom) {
     setChatRoomId(chatRoom);
-    setStateMessages([])
+    setStateMessages([]);
   }
 
+  //!----------CREATING DATABASE INSTANCE------------
   const db = getDatabase();
   const messageRef = ref(db, "chatrooms/" + chatRoomId);
+  //!-------------------------------------------------
 
   //* Using useEffect to prevent infinite loop.
   useEffect(() => {
@@ -61,11 +67,40 @@ export default function ChatScreen({ userName }) {
     });
   }, [chatRoomId]);
 
+  //! ------------Dynamic Classes-------------
+  let chatRoomDivClasses =
+    "chatRooms flex flex-col h-dvh z-1 p:2 md:p-6 relative overflow-y-scroll active ";
+
+  let messagesDivClasses =
+    "flex-1 p:2 sm:p-6 justify-between flex flex-col h-dvh message-section deactive";
+
+  //TODO Dynamic Class Functions
+  function showChatRooms() {
+    chatRoomDivClasses += " active";
+    messagesDivClasses += " deactive";
+  }
+  function hideChatRooms() {
+    let chatRoomClassesArray = chatRoomDivClasses.split(" ");
+    chatRoomClassesArray.filter((e) => e != " active");
+    chatRoomDivClasses = chatRoomClassesArray.join(" ");
+
+    let messagesClassesArray = messagesDivClasses.split(" ");
+    messagesClassesArray.filter((e) => e != " deactive");
+    messagesDivClasses = messagesClassesArray.join(" ");
+  }
+
+  //! ------------Dynamic Classes-------------
+
   return (
     <>
-      {addingChatRoom && <AddChatRoom handleAddChatRoom={handleAddChatRoom} handleCloseChatRoomScreen={handleCloseChatRoomScreen}/>}
+      {addingChatRoom && (
+        <AddChatRoom
+          handleAddChatRoom={handleAddChatRoom}
+          handleCloseChatRoomScreen={handleCloseChatRoomScreen}
+        />
+      )}
       <div className="grid grid-cols-2 main-screen">
-        <div className="chatRooms flex flex-col h-dvh z-1 p:2 md:p-6 relative">
+        <div className={chatRoomDivClasses}>
           <div className="flex sm:items-center justify-between py-3 border-b-2 border-gray-200">
             <div className="relative flex items-center space-x-4 w-full">
               <div className="relative"></div>
@@ -82,9 +117,9 @@ export default function ChatScreen({ userName }) {
               </div>
             </div>
           </div>
-          {chatRooms.map((e,i) => (
+          {chatRooms.map((e, i) => (
             <div
-              key={"chatRoom" + e + ':' + i}
+              key={"chatRoom" + e + ":" + i}
               onClick={() => selectChatRoom(e)}
               className="chat-room my-2"
             >
@@ -102,8 +137,7 @@ export default function ChatScreen({ userName }) {
             </div>
           ))}
         </div>
-
-        <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col h-dvh message-section">
+        <div onClick={hideChatRooms} className={messagesDivClasses}>
           <div className="flex sm:items-center justify-between py-3 border-b-2 border-gray-200">
             <div className="relative flex items-center space-x-4">
               <div className="relative"></div>

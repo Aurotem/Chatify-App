@@ -26,7 +26,7 @@ export default function InputName({ getName }) {
       <div className="fixed h-dvh w-dvw bg-white top-0"></div>
       <div className="absolute hizala w-full h-1/4 items-center justify-center flex rounded-xl md:w-1/2 flex-col">
         <p className="text-xl text-center top-0">Hoşgeldin!</p>
-        <p className="text-sm mt-6">
+        <p className="text-sm mt-6 text-center">
           Bir rumuz girip sohbete hemen başlayabilirsin.
         </p>
         <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"></div>
