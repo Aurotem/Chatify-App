@@ -163,7 +163,7 @@ export default function ChatScreen({ userName, setHasName }) {
                       </span>
                       <button
                         onClick={() => deleteChatRoom(e)}
-                        className="bg-red-600 text-white rounded-md px-2 z-30"
+                        className="bg-red-600 text-white rounded-md px-2"
                       >
                         X
                       </button>
@@ -188,7 +188,7 @@ export default function ChatScreen({ userName, setHasName }) {
             </div>
             <button
               onClick={() => setHasName(true)}
-              className="text-gray-700 text-sm flex align-center justify-center sticky w-full greetings"
+              className="text-gray-700 text-sm flex justify-center items-center sticky w-full greetings"
             >{`Merhaba, ${userName}!`}</button>
             {!active[2] && (
               <button
@@ -211,7 +211,7 @@ export default function ChatScreen({ userName, setHasName }) {
                       <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
                         <div>
                           <span className="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600">
-                            <p className="mb-1 text-left text-base">{e.user}</p>
+                            <p className="mb-1 text-left text-base">{e.user.charAt(0).toUpperCase() + e.user.slice(1)}</p>
                             {e.message}
                           </span>
                           <p className="text-left">{e.date}</p>
