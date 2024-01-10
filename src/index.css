@@ -21,7 +21,7 @@ body{
   grid-template-columns: 0 100%;
 }
 .chatRooms {
-  left: -500px;
+  left: -100px;
   transition: .2s ease-out;
 }
 .message-section{
@@ -31,7 +31,7 @@ body{
 }
 .active {
   left:0;
-  width: 60vw;
+  width: 70vw;
   background: white;
   z-index: 10;
 

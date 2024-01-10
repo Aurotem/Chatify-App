@@ -11,6 +11,12 @@ import { getDatabase, ref, onValue } from "firebase/database";
 import { firebaseConfig, app, analytics } from "../../firebase/fire";
 
 let messages = [];
+
+//!Getting Chat Rooms from local storage.
+let chatRooms = JSON.parse(localStorage.getItem("chatRooms"));
+if (!chatRooms) {
+  localStorage.setItem("chatRooms", JSON.stringify(["global"]));
+}
 export default function ChatScreen({ userName }) {
   //*Messages to display
   const [stateMessages, setStateMessages] = useState([]);
@@ -18,15 +24,9 @@ export default function ChatScreen({ userName }) {
   //*Chatroom Information
   const [chatRoomId, setChatRoomId] = useState("global");
   const [addingChatRoom, setAddingChatRoom] = useState(false);
-  let chatRooms = JSON.parse(localStorage.getItem("chatRooms"));
 
-  //*Getting Chat Rooms from local storage.
-  useEffect(() => {
-    let chatRooms = localStorage.getItem("chatRooms");
-    if (!chatRooms) {
-      localStorage.setItem("chatRooms", JSON.stringify([chatRoomId]));
-    }
-  });
+  //! Checking the chatRooms
+  !chatRooms && (chatRooms = JSON.parse(localStorage.getItem("chatRooms")));
 
   //*Adding Chat Rooms
   function handleAddChatRoom(e) {
@@ -68,25 +68,18 @@ export default function ChatScreen({ userName }) {
   }, [chatRoomId]);
 
   //! ------------Dynamic Classes-------------
-  let chatRoomDivClasses =
-    "chatRooms flex flex-col h-dvh z-1 p:2 md:p-6 relative overflow-y-scroll active ";
+  const [active, setActive] = useState(["", "", false]);
+  let chatRoomDivClasses = `chatRooms flex flex-col h-dvh z-1 p:2 md:p-6 relative overflow-y-scroll ${active[0]}`;
 
-  let messagesDivClasses =
-    "flex-1 p:2 sm:p-6 justify-between flex flex-col h-dvh message-section deactive";
+  let messagesDivClasses = `flex-1 p:2 sm:p-6 justify-between flex flex-col h-dvh message-section ${active[1]}`;
 
   //TODO Dynamic Class Functions
   function showChatRooms() {
-    chatRoomDivClasses += " active";
-    messagesDivClasses += " deactive";
+    setActive(["active", "deactive", true]);
   }
-  function hideChatRooms() {
-    let chatRoomClassesArray = chatRoomDivClasses.split(" ");
-    chatRoomClassesArray.filter((e) => e != " active");
-    chatRoomDivClasses = chatRoomClassesArray.join(" ");
 
-    let messagesClassesArray = messagesDivClasses.split(" ");
-    messagesClassesArray.filter((e) => e != " deactive");
-    messagesDivClasses = messagesClassesArray.join(" ");
+  function hideChatRooms() {
+    let timeOut = setTimeout(setActive(["", "", false]), 500);
   }
 
   //! ------------Dynamic Classes-------------
@@ -108,11 +101,19 @@ export default function ChatScreen({ userName }) {
                 <div className="text-2xl mt-1 flex items-center justify-between">
                   <span className="text-gray-700 mr-3">Sohbet Odaları</span>
                   <button
-                    onClick={handleAddChatRoom}
+                    onClick={handleCloseChatRoomScreen}
                     className="text-right text-sm hover:bg-gray-300 rounded-md p-1 max-w-fit max-h-fit"
                   >
                     + Sohbet odası ekle
                   </button>
+                  {active[2] && (
+                    <button
+                      onClick={hideChatRooms}
+                      className="fixed right-2 top-2 text-4xl z-50 text-gray-900"
+                    >
+                      X
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -137,18 +138,26 @@ export default function ChatScreen({ userName }) {
             </div>
           ))}
         </div>
-        <div onClick={hideChatRooms} className={messagesDivClasses}>
+        <div className={messagesDivClasses}>
           <div className="flex sm:items-center justify-between py-3 border-b-2 border-gray-200">
             <div className="relative flex items-center space-x-4">
               <div className="relative"></div>
               <div className="flex flex-col leading-tight">
-                <div className="text-2xl mt-1 flex items-center">
+                <div className="text-2xl mt-1 flex items-center justify-between">
                   <span className="text-gray-700 mr-3">
                     {chatRoomId.charAt(0).toUpperCase() + chatRoomId.slice(1)}
                   </span>
                 </div>
               </div>
             </div>
+            {!active[2] && (
+              <button
+                onClick={showChatRooms}
+                className="mr-4 text-2xl z-50 text-gray-700"
+              >
+                Rooms
+              </button>
+            )}
           </div>
           <div
             id="messages"
