@@ -15,3 +15,17 @@ body{
 .main-screen {
   grid-template-columns: 30% 70%;
 }
+
+@media (max-width: 600px) {
+.main-screen {
+  grid-template-columns: 0 100%;
+}
+.chatRooms {
+  left: -500px;
+}
+.message-section{
+  top:0;
+  left:0;
+
+}
+}

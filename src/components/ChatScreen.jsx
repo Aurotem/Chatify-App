@@ -18,7 +18,6 @@ export default function ChatScreen({ userName }) {
   const [addingChatRoom, setAddingChatRoom] = useState(false);
 
   let chatRooms = JSON.parse(localStorage.getItem("chatRooms"));
-  console.log(chatRooms);
 
   useEffect(() => {
     let chatRooms = localStorage.getItem("chatRooms");
@@ -30,8 +29,13 @@ export default function ChatScreen({ userName }) {
   function handleAddChatRoom(e) {
     setAddingChatRoom((prev) => !prev);
     let currentChatRooms = JSON.parse(localStorage.getItem("chatRooms"));
+    console.log(currentChatRooms)
     currentChatRooms.push(e);
     localStorage.setItem("chatRooms", JSON.stringify(currentChatRooms));
+  }
+
+  function handleCloseChatRoomScreen() {
+    setAddingChatRoom((prev) => !prev);
   }
 
   function selectChatRoom(chatRoom) {
@@ -59,9 +63,9 @@ export default function ChatScreen({ userName }) {
 
   return (
     <>
-      {addingChatRoom && <AddChatRoom handleAddChatRoom={handleAddChatRoom} />}
+      {addingChatRoom && <AddChatRoom handleAddChatRoom={handleAddChatRoom} handleCloseChatRoomScreen={handleCloseChatRoomScreen}/>}
       <div className="grid grid-cols-2 main-screen">
-        <div className="chatRooms flex flex-col h-dvh z-1 p:2 sm:p-6">
+        <div className="chatRooms flex flex-col h-dvh z-1 p:2 md:p-6 relative">
           <div className="flex sm:items-center justify-between py-3 border-b-2 border-gray-200">
             <div className="relative flex items-center space-x-4 w-full">
               <div className="relative"></div>
@@ -78,9 +82,9 @@ export default function ChatScreen({ userName }) {
               </div>
             </div>
           </div>
-          {chatRooms.map((e) => (
+          {chatRooms.map((e,i) => (
             <div
-              key={"chatRoom" + e}
+              key={"chatRoom" + e + ':' + i}
               onClick={() => selectChatRoom(e)}
               className="chat-room my-2"
             >
@@ -99,7 +103,7 @@ export default function ChatScreen({ userName }) {
           ))}
         </div>
 
-        <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col h-dvh">
+        <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col h-dvh message-section">
           <div className="flex sm:items-center justify-between py-3 border-b-2 border-gray-200">
             <div className="relative flex items-center space-x-4">
               <div className="relative"></div>
