@@ -3,7 +3,7 @@ export default function AddChatRoom({ handleAddChatRoom }) {
   const chatRoomToAdd = useRef();
   return (
     <>
-      <div className="fixed h-dvh w-dvw blur z-10"></div>
+      <div className="fixed h-dvh w-dvw bg-white z-10"></div>
       <div className="hizala fixed h-1/3 w-1/4 bg-white z-10">
         <input
           ref={chatRoomToAdd}
