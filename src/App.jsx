@@ -15,10 +15,8 @@ function App() {
   useEffect(getName, []);
 
   function handleHasName(a) {
-    console.log(a)
     setHasName(a)
   }
-  console.log(hasName)
   return (
     <>
       <ChatScreen userName={userName} setHasName={handleHasName} />

@@ -9,6 +9,7 @@ import AddChatRoom from "./AddChatRoom";
 //* Firebase Imports
 import { getDatabase, ref, onValue } from "firebase/database";
 import { firebaseConfig, app, analytics } from "../../firebase/fire";
+import { current } from "@reduxjs/toolkit";
 
 let messages = [];
 
@@ -41,6 +42,19 @@ export default function ChatScreen({ userName, setHasName }) {
     localStorage.setItem("chatRooms", JSON.stringify(currentChatRooms));
     chatRooms = JSON.parse(localStorage.getItem("chatRooms"));
     setAddingChatRoom((prev) => !prev);
+  }
+
+  //* Deleting Chat Rooms
+
+  function deleteChatRoom(chatRoom) {
+    let currentChatRooms = JSON.parse(localStorage.getItem("chatRooms"));
+    if (!(currentChatRooms.length <= 1)) {
+      console.log(currentChatRooms);
+      const newChatRooms = currentChatRooms.filter((e) => e != chatRoom);
+      console.log(currentChatRooms);
+      localStorage.setItem("chatRooms", JSON.stringify(newChatRooms));
+      chatRooms = JSON.parse(localStorage.getItem("chatRooms"));
+    }
   }
 
   //* Closing Add ChatRoom Screen
@@ -143,10 +157,16 @@ export default function ChatScreen({ userName, setHasName }) {
               <div className="flex items-end">
                 <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start w-full">
                   <div className="w-full">
-                    <span className="px-4 py-2 rounded-lg inline-block bg-gray-300 text-gray-600 w-full">
-                      <p className="mb-1 text-left text-base">
+                    <span className="px-4 py-2 rounded-lg bg-gray-300 text-gray-600 w-full flex justify-between">
+                      <span className="mb-1 text-left text-base">
                         {e.charAt(0).toUpperCase() + e.slice(1)}
-                      </p>
+                      </span>
+                      <button
+                        onClick={() => deleteChatRoom(e)}
+                        className="bg-red-600 text-white rounded-md px-2 z-30"
+                      >
+                        X
+                      </button>
                     </span>
                   </div>
                 </div>
