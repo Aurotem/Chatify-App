@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 //* React
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 //*Components
 import MessageInput from "./MessageInput";
@@ -16,24 +16,31 @@ let messages = [];
 let chatRooms = JSON.parse(localStorage.getItem("chatRooms"));
 if (!chatRooms) {
   localStorage.setItem("chatRooms", JSON.stringify(["global"]));
+  chatRooms = JSON.parse(localStorage.getItem("chatRooms"));
 }
-export default function ChatScreen({ userName }) {
+export default function ChatScreen({ userName, setHasName }) {
   //*Messages to display
   const [stateMessages, setStateMessages] = useState([]);
+
+  //*Dummy div ref to scroll to bottom
+  const dummyDiv = useRef();
+
+  //*Dummy Div Scroll Function
+  function scroll() {
+    dummyDiv.current.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   //*Chatroom Information
   const [chatRoomId, setChatRoomId] = useState("global");
   const [addingChatRoom, setAddingChatRoom] = useState(false);
 
-  //! Checking the chatRooms
-  !chatRooms && (chatRooms = JSON.parse(localStorage.getItem("chatRooms")));
-
   //*Adding Chat Rooms
   function handleAddChatRoom(e) {
-    setAddingChatRoom((prev) => !prev);
     let currentChatRooms = JSON.parse(localStorage.getItem("chatRooms"));
     currentChatRooms.push(e);
     localStorage.setItem("chatRooms", JSON.stringify(currentChatRooms));
+    chatRooms = JSON.parse(localStorage.getItem("chatRooms"));
+    setAddingChatRoom((prev) => !prev);
   }
 
   //* Closing Add ChatRoom Screen
@@ -43,8 +50,16 @@ export default function ChatScreen({ userName }) {
 
   //* Chat Room Selector
   function selectChatRoom(chatRoom) {
-    setChatRoomId(chatRoom);
-    setStateMessages([]);
+    hideChatRooms();
+    setChatRoomId((prev) => {
+      if (prev != chatRoom) {
+        setStateMessages([]);
+        return chatRoom;
+      } else {
+        return chatRoom;
+      }
+    });
+    setTimeout(scroll, 500);
   }
 
   //!----------CREATING DATABASE INSTANCE------------
@@ -62,6 +77,7 @@ export default function ChatScreen({ userName }) {
           //* Check the data is equal to our data to prevent infinite loop (again)
           messages = Object.values(data);
           setStateMessages(messages);
+          setTimeout(scroll, 500);
         }
       }
     });
@@ -79,7 +95,7 @@ export default function ChatScreen({ userName }) {
   }
 
   function hideChatRooms() {
-    let timeOut = setTimeout(setActive(["", "", false]), 500);
+    setActive(["", "", false]);
   }
 
   //! ------------Dynamic Classes-------------
@@ -150,10 +166,14 @@ export default function ChatScreen({ userName }) {
                 </div>
               </div>
             </div>
+            <button
+              onClick={() => setHasName(true)}
+              className="text-gray-700 text-sm flex align-center justify-center sticky w-full greetings"
+            >{`Merhaba, ${userName}!`}</button>
             {!active[2] && (
               <button
                 onClick={showChatRooms}
-                className="mr-4 text-2xl z-50 text-gray-700"
+                className="mr-4 text-2xl z-0 sm:z-20 text-gray-700"
               >
                 Rooms
               </button>
@@ -163,39 +183,44 @@ export default function ChatScreen({ userName }) {
             id="messages"
             className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch justify-items-start h-dvh overflow-x-hidden"
           >
-            {stateMessages.map((e, i) =>
-              e.user !== userName ? (
-                <div key={"global" + i} className="chat-message">
-                  <div className="flex items-end">
-                    <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
-                      <div>
-                        <span className="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600">
-                          <p className="mb-1 text-left text-base">{e.user}</p>
-                          {e.message}
-                        </span>
-                        <p className="text-left">{e.date}</p>
+            {stateMessages ? (
+              stateMessages.map((e, i) =>
+                e.user !== userName ? (
+                  <div key={"global" + i} className="chat-message">
+                    <div className="flex items-end">
+                      <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
+                        <div>
+                          <span className="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600">
+                            <p className="mb-1 text-left text-base">{e.user}</p>
+                            {e.message}
+                          </span>
+                          <p className="text-left">{e.date}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ) : (
-                <div key={"global" + i} className="chat-message">
-                  <div className="flex items-end justify-end">
-                    <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end">
-                      <div>
-                        <span className="px-4 py-2 rounded-lg inline-block rounded-br-none bg-blue-600 text-white">
-                          <p className="mb-1 text-right text-base">
-                            {e.user.charAt(0).toUpperCase() + e.user.slice(1)}
-                          </p>
-                          <span className="flex">{e.message}</span>
-                        </span>
-                        <p className="text-right">{e.date}</p>
+                ) : (
+                  <div key={"global" + i} className="chat-message">
+                    <div className="flex items-end justify-end">
+                      <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end">
+                        <div>
+                          <span className="px-4 py-2 rounded-lg inline-block rounded-br-none bg-blue-600 text-white">
+                            <p className="mb-1 text-right text-base">
+                              {e.user.charAt(0).toUpperCase() + e.user.slice(1)}
+                            </p>
+                            <span className="flex">{e.message}</span>
+                          </span>
+                          <p className="text-right">{e.date}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                )
               )
+            ) : (
+              <p>Henüz bir mesaj yok.</p>
             )}
+            <div ref={dummyDiv}></div>
           </div>
           <MessageInput userName={userName} chatRoomId={chatRoomId} />
         </div>

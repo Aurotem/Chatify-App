@@ -25,7 +25,9 @@ export default function AddChatRoom({
         <input
           ref={chatRoomToAdd}
           onKeyDown={(e) =>
-            e.key == "Enter" && handleAddChatRoom(chatRoomToAdd.current.value)
+            e.key == "Enter" &&
+            chatRoomToAdd.current.value.length > 1 &&
+            handleAddChatRoom(chatRoomToAdd.current.value)
           }
           type="text"
           id="user-name"
@@ -34,7 +36,10 @@ export default function AddChatRoom({
           required
         />
         <button
-          onClick={() => handleAddChatRoom(chatRoomToAdd.current.value)}
+          onClick={() =>
+            chatRoomToAdd.current.value.length > 1 &&
+            handleAddChatRoom(chatRoomToAdd.current.value)
+          }
           className="text-white mt-2 w-1/2 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           Ekle

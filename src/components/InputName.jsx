@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-export default function InputName({ getName }) {
-  const [hasName, setHasName] = useState(false);
+export default function InputName({ getName, hasName, setHasName, name }) {
   let userName = useRef();
 
   //* Set the typed name in localStorage as well as in a variable.
@@ -21,9 +20,16 @@ export default function InputName({ getName }) {
       setHasName(true);
     }
   }, []);
+
   return hasName ? (
     <>
       <div className="fixed h-dvh w-dvw bg-white top-0"></div>
+      <button
+          className="text-gray-800 text-4xl absolute right-2 top-2"
+          onClick={() => name && setHasName(false)}
+        >
+          X
+        </button>
       <div className="absolute hizala w-full h-1/4 items-center justify-center flex rounded-xl md:w-1/2 flex-col">
         <p className="text-xl text-center top-0">Hoşgeldin!</p>
         <p className="text-sm mt-6 text-center">

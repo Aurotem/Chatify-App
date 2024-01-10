@@ -7,16 +7,22 @@ import ChatScreen from "./components/ChatScreen";
 
 function App() {
   const [userName, setUserName] = useState();
+  const [hasName, setHasName] = useState(false);
 
   function getName() {
     setUserName(localStorage.getItem("userName"));
   }
   useEffect(getName, []);
 
+  function handleHasName(a) {
+    console.log(a)
+    setHasName(a)
+  }
+  console.log(hasName)
   return (
     <>
-      <ChatScreen userName={userName} />
-      <InputName getName={getName} />
+      <ChatScreen userName={userName} setHasName={handleHasName} />
+      <InputName getName={getName} hasName={hasName} setHasName={handleHasName} name={userName} />
     </>
   );
 }
